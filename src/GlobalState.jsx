@@ -1,19 +1,51 @@
-// GlobalStateContext.js
-import React, { createContext, useState } from 'react';
 
-// Create a context
-export const GlobalStateContext = createContext();
+import { createContext, useContext, useState } from "react";
+import axios from 'axios';
+const apiUrl = import.meta.env.VITE_API_URL;
 
-// Create a provider component
-export const GlobalStateProvider = ({ children }) => {
-    const [state, setState] = useState({
-        user: undefined,
+const GlobalContext = createContext();
 
-    });
+const GlobalProvider = ({ children }) => {
+    const fetchUserData = async (username) => {
+        const token = localStorage.getItem('authTokenReact');
+
+        if (!token || !username) return
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+
+
+        try {
+            const { data } = await axios.get(`${apiUrl}users/${username}`, { headers })
+            if (data) {
+                console.log(data.user);
+                return (data.user)
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+
+
+
+
+
+    const value = {
+        fetchUserData
+    }
 
     return (
-        <GlobalStateContext.Provider value={{ state, setState }}>
+        <GlobalContext.Provider value={value}>
             {children}
-        </GlobalStateContext.Provider>
-    );
-};
+        </GlobalContext.Provider>
+    )
+
+}
+
+const useGlobal = function () {
+
+    return useContext(GlobalContext);
+}
+
+export { GlobalProvider, useGlobal }

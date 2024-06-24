@@ -8,6 +8,7 @@ import axios from 'axios';
 
 import { Error } from "@mui/icons-material";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useGlobal } from "../GlobalState.jsx";
 
 
 
@@ -16,6 +17,7 @@ const Home = () => {
 
     const apiUrl = import.meta.env.VITE_API_URL;
     const { user, setUser } = useAuth();
+    const { fetchUserData } = useGlobal();
 
     const [postList, setPostList] = useState([]);
     const [lastPage, setLastPage] = useState(1);
@@ -23,31 +25,19 @@ const Home = () => {
 
     const postContainer = useRef(null);
 
-    const fetchUserData = async () => {
-
-        const token = localStorage.getItem('authTokenReact');
+    const retrieveAuthData = async () => {
         const username = localStorage.getItem('reactUsername');
-        if (!token || !username) return
-
-        console.log(username)
-        const headers = {
-            Authorization: `Bearer ${token}`
-        };
-
-
-
-        try {
-            const { data } = await axios.get(`${apiUrl}users/${username}`, { headers })
-            if (data) {
-                console.log(data.user);
-                setUser(data.user);
-
-
-
-            }
-        } catch (err) {
-            console.error(err);
+        if (!username) {
+            //handle later
+            return
         }
+        const userData = await fetchUserData(username);
+        if (!userData) {
+            //handle later
+            return
+        }
+
+        setUser(userData);
     }
 
 
@@ -62,7 +52,7 @@ const Home = () => {
             .then((res) => {
                 if (res) {
                     console.log(res);
-                    setTotalPages(res.data.totalPages); // Use res.data.totalPages here
+                    setTotalPages(res.data.totalPages);
                     setPostList(oldList => [...oldList, ...res.data.allPosts]);
                 }
             })
@@ -72,7 +62,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        fetchUserData();
+        retrieveAuthData();
         fetchPosts();
     }, [])
 

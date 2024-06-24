@@ -11,18 +11,20 @@ import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
-import { GlobalStateContext } from "../../GlobalState";
+import { useAuth } from "../../contexts/AuthContext";
+
 
 
 
 
 export default ({ post, setPostList, width, isLinkClickable = true }) => {
 
-    const { state, setState } = useContext(GlobalStateContext);
+
     const [editing, setEditing] = useState(false);
+    const { user } = useAuth();
     const newContent = useRef('');
     const apiUrl = import.meta.env.VITE_API_URL;
-    const isUserPost = post?.userId == state?.user?.id;
+    const isUserPost = post?.userId == user?.id;
     const navigate = useNavigate();
 
 

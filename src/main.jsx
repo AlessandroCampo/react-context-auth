@@ -11,7 +11,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Home from './views/Home.jsx';
-import { GlobalStateProvider } from './GlobalState.jsx';
+import { GlobalProvider } from './GlobalState.jsx';
 import UserPage from './views/UserPage.jsx';
 import PostPage from './views/PostPage.jsx';
 import LoginPage from './views/LoginPage.jsx';
@@ -25,11 +25,11 @@ const router = createBrowserRouter([
   {
     path: '/',
     element:
-      <GlobalStateProvider>
+      <GlobalProvider>
         <AuthProvider>
           <App />
         </AuthProvider>
-      </GlobalStateProvider>,
+      </GlobalProvider>,
     children: [
       {
         path: '',
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element:
-      <GlobalStateProvider>
+      <GlobalProvider>
         <AuthProvider>
           <AuthLayout>
 
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
 
         </AuthProvider>
 
-      </GlobalStateProvider>,
+      </GlobalProvider>,
     children: [
       {
         path: '',
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element:
-      <GlobalStateProvider>
+      <GlobalProvider>
         <AuthProvider>
           <AuthLayout>
 
@@ -78,7 +78,7 @@ const router = createBrowserRouter([
         </AuthProvider>
 
 
-      </GlobalStateProvider>,
+      </GlobalProvider>,
     children: [
       {
         path: '',

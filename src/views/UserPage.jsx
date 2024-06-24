@@ -4,49 +4,34 @@ import axios from "axios";
 import { Avatar } from "@mui/material";
 import Post from "../components/PostComponents/Post";
 import './styles/UserPage.css'
-import { GlobalStateContext } from "../GlobalState";
+import { useGlobal } from "../GlobalState";
+import { useAuth } from "../contexts/AuthContext";
+
 
 
 
 export default () => {
     let { username } = useParams();
     const apiUrl = import.meta.env.VITE_API_URL;
-    const { state, setState } = useContext(GlobalStateContext);
+    const { fetchUserData } = useGlobal();
+    const { user: authUser } = useAuth();
     const [user, setUser] = useState(undefined);
     const [postList, setPostList] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     const [totalPages, setTotalPages] = useState(2);
     const postContainer = useRef(null);
     // const [isLoggedUserPage, setIsLoggedUserPage] = useState(false);
-    const isLoggedUserPage = username === state?.user?.username;
+    const isLoggedUserPage = username === authUser?.username;
 
-    const fetchUserData = async () => {
-
-        const token = localStorage.getItem('authTokenReact');
-        if (!token) return
-
-        const headers = {
-            Authorization: `Bearer ${token}`
-        };
-
-
-
-        try {
-            const { data } = await axios.get(`${apiUrl}users/${username}`, { headers })
-            if (data) {
-                console.log(data.user);
-                setUser(data.user);
-                setPostList([...data.user.posts])
-                console.log(state.user)
-
-            }
-        } catch (err) {
-            console.error(err);
-        }
+    const retrieveUserPageData = async () => {
+        const userData = await fetchUserData(username);
+        setUser(userData);
+        setPostList(userData.posts)
     }
 
+
     useEffect(() => {
-        fetchUserData()
+        retrieveUserPageData()
     }, [username])
 
 

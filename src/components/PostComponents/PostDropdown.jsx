@@ -9,7 +9,9 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PersonAddSharpIcon from '@mui/icons-material/PersonAddSharp';
 import Dialogue from '../Dialogue.jsx';
 import axios from 'axios';
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router';
 
 
 const StyledMenu = styled((props) => (
@@ -53,12 +55,12 @@ const StyledMenu = styled((props) => (
     },
 }));
 
-export default function CustomizedMenus({ setPostList, setEditing, post, isUserPost }) {
+export default function CustomizedMenus({ setPostList, changePostVisibility, post, isUserPost }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [openDeleteDialogue, setopenDeleteDialogue] = React.useState(false);
     const open = Boolean(anchorEl);
     const apiUrl = import.meta.env.VITE_API_URL;
-
+    const navigate = useNavigate()
 
 
     const handleClick = (event) => {
@@ -89,9 +91,11 @@ export default function CustomizedMenus({ setPostList, setEditing, post, isUserP
         setopenDeleteDialogue(false);
     }
 
-    const allowEdit = () => {
-        setEditing(true);
+    const hideOrShow = () => {
+        changePostVisibility(!post.published);
+
         handleClose();
+        navigate('/');
     }
 
 
@@ -99,9 +103,9 @@ export default function CustomizedMenus({ setPostList, setEditing, post, isUserP
         isUserPost ?
             [
                 {
-                    label: 'Edit',
-                    cb: allowEdit,
-                    icon: <EditIcon />
+                    label: post?.published ? 'Hide' : 'Show',
+                    cb: hideOrShow,
+                    icon: post?.published ? <VisibilityOffIcon /> : <VisibilityIcon />
                 },
                 {
                     label: 'Delete',

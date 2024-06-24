@@ -1,5 +1,6 @@
 
 import { createContext, useContext, useState } from "react";
+import { toast } from 'react-toastify';
 import axios from 'axios';
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -26,13 +27,23 @@ const GlobalProvider = ({ children }) => {
         }
     }
 
+    const notifyError = (errorText) => {
+        toast.error(errorText)
+    }
+
+    const notifySuccess = (text) => {
+        toast.success(text)
+    }
+
 
 
 
 
 
     const value = {
-        fetchUserData
+        fetchUserData,
+        notifySuccess,
+        notifyError
     }
 
     return (

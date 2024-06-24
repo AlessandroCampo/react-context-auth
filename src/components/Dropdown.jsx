@@ -35,8 +35,9 @@ export default function Dropdown({ button, options = [] }) {
                 open={open}
                 onClose={handleClose}
                 onClick={handleClose}
-                transformOrigin={{ horizontal: 'top', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'top', vertical: 'top' }}
+
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 sx={{
                     mt: -9,
                     ml: 2,

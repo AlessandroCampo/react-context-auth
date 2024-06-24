@@ -102,7 +102,7 @@ export default () => {
                 <div className="posts-container" ref={postContainer}>
                     {
                         postList.map((p, i) => {
-                            return <Post
+                            return p.published && <Post
                                 user={user}
                                 key={p?.id || `post-${i}`}
                                 post={{ ...p, user: user }}

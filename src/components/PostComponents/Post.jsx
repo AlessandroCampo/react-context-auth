@@ -12,6 +12,7 @@ import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useGlobal } from "../../GlobalState";
 
 
 
@@ -20,16 +21,16 @@ import { useAuth } from "../../contexts/AuthContext";
 export default ({ post, setPostList, width, isLinkClickable = true }) => {
 
 
-    const [editing, setEditing] = useState(false);
+
     const { user } = useAuth();
-    const newContent = useRef('');
+    const { notifyError, notifySuccess } = useGlobal();
     const apiUrl = import.meta.env.VITE_API_URL;
     const isUserPost = post?.userId == user?.id;
     const navigate = useNavigate();
 
 
 
-    const editPost = async () => {
+    const changePostVisibility = async (boolean) => {
 
         const token = localStorage.getItem('authTokenReact');
         if (!token) return
@@ -38,24 +39,24 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
                 Authorization: `Bearer ${token}`
             };
             const data = {
-                content: newContent.current.value
+                published: boolean
             }
-            const response = await axios.put(`${apiUrl}posts/${post.slug}`, data, { headers });
+            const response = await axios.patch(`${apiUrl}posts/${post.slug}/change-visibility`, data, { headers });
             if (response) {
 
                 setPostList(currList => currList.map(p => {
                     if (p?.id === post?.id) {
-                        return { ...p, content: newContent.current.value }
+                        return { ...p, published: boolean }
                     }
                     return { ...p }
                 }));
+                notifySuccess(`Your post has been succesfully ${boolean ? 'published' : 'hidden'}`)
             }
         } catch (err) {
             console.error(err);
         }
 
 
-        setEditing(false);
     }
 
     const showUserPage = (e) => {
@@ -98,7 +99,7 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
                 {
                     <CustomizedMenus
                         setPostList={setPostList}
-                        setEditing={setEditing}
+                        changePostVisibility={(bool) => { changePostVisibility(bool) }}
                         post={post}
                         isUserPost={isUserPost}
 
@@ -107,25 +108,19 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
                 }
 
             </div>
-            <div className="px-5" onClick={navigateToPostDetail}>
+            <div className="px-5 cursor-pointer" onClick={navigateToPostDetail}>
 
-
-                <TextareaAutosize
-                    defaultValue={post?.content}
-                    readOnly={!editing}
-                    ref={newContent}
-                    className={`${editing ? 'cursor-text border-2 border-white' : 'cursor-pointer border-0'} w-full max-h-[160px]`}
-                >
-
-                </TextareaAutosize>
-
+                <p className='w-full max-h-[160px]'>
+                    {post?.content}
+                </p>
 
 
             </div>
             {
                 post.image &&
                 <figure
-                    className="w-full h-[150px]"
+                    className={`w-full h-[${width / 2}] cursor-pointer`}
+                    onClick={navigateToPostDetail}
                 >
                     <img
                         alt="post_image"
@@ -165,12 +160,7 @@ export default ({ post, setPostList, width, isLinkClickable = true }) => {
                 </div>
 
 
-                {
-                    editing &&
-                    <button onClick={editPost}>
-                        Done
-                    </button>
-                }
+
 
             </div>
             <div className="add-comment px-6 w-full">

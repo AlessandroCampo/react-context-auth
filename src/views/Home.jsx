@@ -17,7 +17,7 @@ const Home = () => {
 
     const apiUrl = import.meta.env.VITE_API_URL;
     const { user, setUser } = useAuth();
-    const { fetchUserData } = useGlobal();
+    const { fetchUserData, notifyError, notifySuccess } = useGlobal();
 
     const [postList, setPostList] = useState([]);
     const [lastPage, setLastPage] = useState(1);
@@ -98,13 +98,7 @@ const Home = () => {
         };
     }, [postList]);
 
-    const notifyError = (errorText) => {
-        toast.error(errorText)
-    }
 
-    const notifySuccess = (text) => {
-        toast.success(text)
-    }
 
     return (
         <>
@@ -126,7 +120,7 @@ const Home = () => {
                     <div className="posts-container" ref={postContainer}>
                         {
                             postList.map((p, i) => {
-                                return <Post
+                                return p.published && <Post
                                     key={p.id || `post-${i}`}
                                     post={p}
                                     setPostList={setPostList}

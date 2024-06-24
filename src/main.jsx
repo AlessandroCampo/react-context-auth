@@ -15,40 +15,54 @@ import { GlobalStateProvider } from './GlobalState.jsx';
 import UserPage from './views/UserPage.jsx';
 import PostPage from './views/PostPage.jsx';
 import LoginPage from './views/LoginPage.jsx';
+import { AuthProvider } from './contexts/AuthContext.jsx';
+import Layout from './views/layouts/Layout.jsx';
 
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element:
+      <GlobalStateProvider>
+        <AuthProvider>
+          <Layout />
+        </AuthProvider>
+      </GlobalStateProvider>,
     children: [
       {
         path: '',
         element: <Home />,
       },
       {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
         path: ':username',
         element: <UserPage />
       },
       {
-        path: '/post/:slug',
+        path: 'post/:slug',
         element: <PostPage />
       }
-
     ],
+  },
+  {
+    path: '/login',
+    element:
+      <GlobalStateProvider>
+        <AuthProvider>
+          <LoginPage />
+        </AuthProvider>
+      </GlobalStateProvider>,
   },
 ]);
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 
-  <GlobalStateProvider>
-    <RouterProvider router={router} />
-  </GlobalStateProvider>
+
+  <RouterProvider router={router}>
+
+  </RouterProvider>
+
+
 
 )

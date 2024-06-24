@@ -1,5 +1,5 @@
 export default function () {
     return (
-        <h2>LOGINPAGE</h2>
+        <h2 className="text-white text-4xl">LOGINPAGE</h2>
     )
 }

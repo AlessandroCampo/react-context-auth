@@ -8,23 +8,7 @@ const AuthProvider = ({ children }) => {
     const [token, setToken] = useState('');
     const navigate = useNavigate();
 
-    const login = async (paylod = {
-        username: 'Aleks7',
-        password: 'Pass123!'
-    }) => {
 
-        try {
-            const { data } = await axios.post(`${apiUrl}users/login`, paylod);
-            if (data) {
-                localStorage.setItem('authTokenReact', data.token)
-                setUser(data.user);
-                setToken(data.token);
-
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }
 
     const logout = async () => {
         setToken('');
@@ -32,18 +16,13 @@ const AuthProvider = ({ children }) => {
         return navigate('/login')
     }
 
-    useEffect(() => {
-        const existingToken = localStorage.getItem('authTokenReact');
-        console.log(existingToken, 'should redirect');
-        if (!existingToken) {
-            return navigate('/login')
-        }
-    }, [])
+
 
     const value = {
         user,
         token,
-        login,
+        setUser,
+        setToken,
         logout
     }
 
@@ -56,6 +35,7 @@ const AuthProvider = ({ children }) => {
 }
 
 const useAuth = function () {
+
     return useContext(AuthContext);
 }
 

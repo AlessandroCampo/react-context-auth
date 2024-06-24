@@ -12,8 +12,9 @@ import axios from 'axios';
 
 import './post.css';
 import { BeatLoader, CircleLoader, PropagateLoader } from "react-spinners";
+import { useAuth } from "../../contexts/AuthContext";
 
-export default ({ user, setPostList, notifyError, onPostCreate, notifySuccess }) => {
+export default ({ notifyError, onPostCreate, notifySuccess }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const wrapper = useRef();
     const [postContent, setPostContent] = useState('');
@@ -21,10 +22,8 @@ export default ({ user, setPostList, notifyError, onPostCreate, notifySuccess })
     const [postMedia, setPostMedia] = useState(undefined);
     const [imagePreview, setImagePreview] = useState('');
     const [postErrors, setPostErrors] = useState([]);
-    const postDefault = {
-        content: '',
-        image: imagePreview || undefined,
-    };
+    const { user } = useAuth();
+    console.log(user);
 
     const updatePostContent = (e) => {
 

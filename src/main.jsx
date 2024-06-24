@@ -49,10 +49,13 @@ const router = createBrowserRouter([
     path: '/login',
     element:
       <GlobalStateProvider>
-        <AuthLayout>
+        <AuthProvider>
+          <AuthLayout>
 
 
-        </AuthLayout>
+          </AuthLayout>
+
+        </AuthProvider>
 
       </GlobalStateProvider>,
     children: [
@@ -66,8 +69,14 @@ const router = createBrowserRouter([
     path: '/register',
     element:
       <GlobalStateProvider>
-        <AuthLayout>
-        </AuthLayout>
+        <AuthProvider>
+          <AuthLayout>
+
+
+          </AuthLayout>
+
+        </AuthProvider>
+
 
       </GlobalStateProvider>,
     children: [

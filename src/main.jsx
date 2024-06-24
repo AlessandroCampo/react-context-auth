@@ -18,6 +18,7 @@ import LoginPage from './views/LoginPage.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import AuthLayout from './views/layouts/AuthLayout.jsx';
 import RegisterPage from './views/RegisterPage.jsx';
+import AuthMiddleware from './middlewares/AuthMiddleware.jsx';
 
 
 
@@ -27,7 +28,10 @@ const router = createBrowserRouter([
     element:
       <GlobalProvider>
         <AuthProvider>
-          <App />
+          <AuthMiddleware>
+
+            <App />
+          </AuthMiddleware>
         </AuthProvider>
       </GlobalProvider>,
     children: [

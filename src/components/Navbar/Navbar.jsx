@@ -1,15 +1,34 @@
 import './Navbar.css';
 import logo from '../../assets/images/boolbook-favicon-color.png'
-import { IoHome, IoHomeOutline, IoSearchOutline, IoHeart, IoHeartOutline } from "react-icons/io5";
+import { IoHome, IoHomeOutline, IoSearchOutline, IoHeart, IoHeartOutline, IoLogOut, IoSettings } from "react-icons/io5";
+
 import { RiUserLine, RiUserFill } from 'react-icons/ri';
 import { Avatar } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import Dropdown from '../Dropdown';
 
 
 
 
 export default () => {
-    const user = {}
+    const { user, logout } = useAuth();
+    const userDropdownOptions = [
+        {
+            label: 'Logout',
+            icon: <IoLogOut
+
+            />,
+            cb: () => { logout() }
+        },
+        {
+            label: 'Settins',
+            icon: <IoSettings
+
+            />,
+            cb: () => { }
+        },
+    ]
     return (
         <menu className='flex flex-col justify-between items-start h-screen py-8 ps-6 fixed'>
             <Link
@@ -41,12 +60,15 @@ export default () => {
 
             </div>
             <div className="navbar-bottom text-white flex flex-col gap-2">
-                <Avatar
-                    sx={{ bgcolor: '#DAA520', color: 'gray', width: 36, height: 36 }}
-                    alt={user?.username}
-                    src={user?.profilePic || ''}
-
+                <Dropdown
+                    button={<Avatar
+                        sx={{ bgcolor: '#DAA520', color: 'gray', width: 36, height: 36 }}
+                        alt={user?.username}
+                        src={user?.avatar || ''}
+                    />}
+                    options={userDropdownOptions}
                 />
+
             </div>
         </menu>
 

@@ -9,7 +9,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 
 export default () => {
-
+    const user = {}
     return (
         <menu className='flex flex-col justify-between items-start h-screen py-8 ps-6 fixed'>
             <Link

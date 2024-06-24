@@ -16,7 +16,8 @@ import UserPage from './views/UserPage.jsx';
 import PostPage from './views/PostPage.jsx';
 import LoginPage from './views/LoginPage.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
-import Layout from './views/layouts/Layout.jsx';
+import AuthLayout from './views/layouts/AuthLayout.jsx';
+import RegisterPage from './views/RegisterPage.jsx';
 
 
 
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
     element:
       <GlobalStateProvider>
         <AuthProvider>
-          <Layout />
+          <App />
         </AuthProvider>
       </GlobalStateProvider>,
     children: [
@@ -48,10 +49,33 @@ const router = createBrowserRouter([
     path: '/login',
     element:
       <GlobalStateProvider>
-        <AuthProvider>
-          <LoginPage />
-        </AuthProvider>
+        <AuthLayout>
+
+
+        </AuthLayout>
+
       </GlobalStateProvider>,
+    children: [
+      {
+        path: '',
+        element: <LoginPage />,
+      }
+    ]
+  },
+  {
+    path: '/register',
+    element:
+      <GlobalStateProvider>
+        <AuthLayout>
+        </AuthLayout>
+
+      </GlobalStateProvider>,
+    children: [
+      {
+        path: '',
+        element: <RegisterPage />,
+      }
+    ]
   },
 ]);
 

@@ -112,7 +112,7 @@ export default ({ notifyError, onPostCreate, notifySuccess }) => {
                 <Avatar
                     sx={{ bgcolor: '#DAA520', color: 'gray', width: 48, height: 48 }}
                     alt={user?.username}
-                    src={user?.profilePic || ''}
+                    src={user?.avatar || ''}
 
                 />
                 <textarea

@@ -5,8 +5,9 @@ import Navbar from "../components/Navbar/Navbar";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { GlobalStateContext } from "../GlobalState.jsx";
+
 import { Error } from "@mui/icons-material";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 
 
@@ -14,14 +15,40 @@ import { Error } from "@mui/icons-material";
 const Home = () => {
 
     const apiUrl = import.meta.env.VITE_API_URL;
-    const { state } = useContext(GlobalStateContext);
+    const { user, setUser } = useAuth();
 
     const [postList, setPostList] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     const [totalPages, setTotalPages] = useState(2);
-    const user = state.user;
 
     const postContainer = useRef(null);
+
+    const fetchUserData = async () => {
+
+        const token = localStorage.getItem('authTokenReact');
+        const username = localStorage.getItem('reactUsername');
+        if (!token || !username) return
+
+        console.log(username)
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+
+
+
+        try {
+            const { data } = await axios.get(`${apiUrl}users/${username}`, { headers })
+            if (data) {
+                console.log(data.user);
+                setUser(data.user);
+
+
+
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
 
     const fetchPosts = async (page = 1) => {
@@ -45,6 +72,7 @@ const Home = () => {
 
 
     useEffect(() => {
+        fetchUserData();
         fetchPosts();
     }, [])
 

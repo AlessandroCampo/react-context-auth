@@ -1,11 +1,11 @@
 
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Layout from './views/layouts/Layout';
 import { useEffect } from 'react';
 
 
 const App = () => {
-
+    const navigate = useNavigate();
     useEffect(() => {
         const existingToken = localStorage.getItem('authTokenReact');
         console.log(existingToken, 'should redirect');
